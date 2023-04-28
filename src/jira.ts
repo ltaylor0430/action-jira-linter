@@ -35,7 +35,7 @@ export class Jira {
     const credentials = `${username}:${token}`;
     const authorization = Buffer.from(credentials).toString('base64');
     return axios.create({
-      baseURL: `${baseURL}/rest/api/3`,
+      baseURL: `${baseURL}/rest/api/2`,
       timeout: 2000,
       headers: { authorization: `Basic ${authorization}` },
     });
