@@ -7,9 +7,9 @@ export class Jira {
   client: AxiosInstance;
   baseURL: string;
 
-  constructor(baseURL: string, username: string, token: string) {
+  constructor(baseURL: string, username: string, token: string, isBearer: boolean = false) {
     this.baseURL = baseURL;
-    this.client = this.getJIRAClient(baseURL, username, token);
+    this.client = this.getJIRAClient(baseURL, username, token,isBearer);
   }
 
   /**
@@ -31,14 +31,23 @@ export class Jira {
     } else return [];
   };
 
-  private getJIRAClient = (baseURL: string, username: string, token: string): AxiosInstance => {
-    const credentials = `${username}:${token}`;
-    const authorization = Buffer.from(credentials).toString('base64');
-    return axios.create({
-      baseURL: `${baseURL}/rest/api/2`,
-      timeout: 2000,
-      headers: { authorization: `Basic ${authorization}` },
-    });
+  private getJIRAClient = (baseURL: string, username: string, token: string, isBearer: boolean): AxiosInstance => {
+   
+    if (isBearer) {
+      return axios.create({
+        baseURL: `${baseURL}/rest/api/2`,
+        timeout: 2000,
+        headers: { authorization: `Bearer ${token}` },
+      });
+    } else {
+      const credentials = `${username}:${token}`;
+      const authorization = Buffer.from(credentials).toString('base64');
+      return axios.create({
+        baseURL: `${baseURL}/rest/api/2`,
+        timeout: 2000,
+        headers: { authorization: `Basic ${authorization}` },
+      });
+    }
   };
 
   getTicketDetails = async (key: string): Promise<JIRADetails> => {

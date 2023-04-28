@@ -22,6 +22,7 @@ const getInputs = (): JIRALintActionInputs => {
   const githubToken: string = core.getInput('github-token', {
     required: true,
   });
+  const isBearerToken:boolean = core.getInput('is-bearer-token', {required: false}) === 'true';
   const branchIgnorePattern: string = core.getInput('skip-branches', { required: false }) || '';
   const skipComments: boolean = core.getInput('skip-comments', { required: false }) === 'true';
   const prThreshold = parseInt(core.getInput('pr-threshold', { required: false }), 10);
@@ -40,6 +41,7 @@ const getInputs = (): JIRALintActionInputs => {
     validateIssueStatus,
     allowedIssueStatuses,
     failOnError,
+    isBearerToken,
   };
 };
 
@@ -56,6 +58,7 @@ async function run(): Promise<void> {
       validateIssueStatus,
       allowedIssueStatuses,
       failOnError,
+      isBearerToken,
     } = getInputs();
 
     const exit = (message: string): void => {
@@ -105,7 +108,7 @@ async function run(): Promise<void> {
     // common fields for both issue and comment
     const commonPayload: UpdateIssueParams = { owner, repo, issue: prNumber };
     const gh = new GitHub(githubToken);
-    const jira = new Jira(jiraBaseURL, jiraUser, jiraToken);
+    const jira = new Jira(jiraBaseURL, jiraUser, jiraToken, isBearerToken);
 
     if (!headBranch && !baseBranch) {
       const commentBody = 'action-jira-linter is unable to determine the head and base branch.';
