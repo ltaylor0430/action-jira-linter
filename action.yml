@@ -40,6 +40,10 @@ inputs:
     description: 'Set this to true if you want action-jira-linter to fail the PR if it encounters an error'
     required: false
     default: true
+  is-bearer-token:
+    description: 'Set this to true if you want to authenticate using a bearer token'
+    required: false
+    default: false
 
 runs:
   using: 'node12'
