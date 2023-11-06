@@ -22,7 +22,7 @@ const getInputs = (): JIRALintActionInputs => {
   const githubToken: string = core.getInput('github-token', {
     required: true,
   });
-  const isBearerToken:boolean = core.getInput('is-bearer-token', {required: false}) === 'true';
+  const isBearerToken: boolean = core.getInput('is-bearer-token', { required: false }) === 'true';
   const branchIgnorePattern: string = core.getInput('skip-branches', { required: false }) || '';
   const skipComments: boolean = core.getInput('skip-comments', { required: false }) === 'true';
   const prThreshold = parseInt(core.getInput('pr-threshold', { required: false }), 10);
@@ -183,7 +183,8 @@ async function run(): Promise<void> {
       } else {
         console.log('PR description will not be updated.');
       }
-       if (!Jira.isIssueStatusValid(validateIssueStatus, allowedIssueStatuses, details)) {
+      if (!Jira.isIssueStatusValid(validateIssueStatus, allowedIssueStatuses, details)) {
+        // eslint-disable-next-line i18n-text/no-en
         return exit('The found jira issue does is not in acceptable statuses');
       } else {
         console.log('The issue status is valid.');

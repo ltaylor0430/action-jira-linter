@@ -7,9 +7,9 @@ export class Jira {
   client: AxiosInstance;
   baseURL: string;
 
-  constructor(baseURL: string, username: string, token: string, isBearer: boolean = false) {
+  constructor(baseURL: string, username: string, token: string, isBearer = false) {
     this.baseURL = baseURL;
-    this.client = this.getJIRAClient(baseURL, username, token,isBearer);
+    this.client = this.getJIRAClient(baseURL, username, token, isBearer);
   }
 
   /**
@@ -32,7 +32,6 @@ export class Jira {
   };
 
   private getJIRAClient = (baseURL: string, username: string, token: string, isBearer: boolean): AxiosInstance => {
-   
     if (isBearer) {
       return axios.create({
         baseURL: `${baseURL}/rest/api/2`,
@@ -108,7 +107,7 @@ export class Jira {
   static getPRDescription = (body: string | null, details: JIRADetails, allowedStatuses: string[]): string => {
     const displayKey = details.key.toUpperCase();
     const allowedStatusesString = allowedStatuses.join(', ');
-    
+
     let description = `
 <details open>
   <summary><a href="${details.url}" title="${displayKey}" target="_blank">${displayKey}</a></summary>
