@@ -105,9 +105,10 @@ export class Jira {
   };
 
   /** Get PR description with story/issue details. */
-  static getPRDescription = (body: string | null, details: JIRADetails): string => {
+  static getPRDescription = (body: string | null, details: JIRADetails, allowedStatuses: string[]): string => {
     const displayKey = details.key.toUpperCase();
-
+    const allowedStatusesString = allowedStatuses.join(', ');
+    
     let description = `
 <details open>
   <summary><a href="${details.url}" title="${displayKey}" target="_blank">${displayKey}</a></summary>
@@ -136,6 +137,11 @@ export class Jira {
       <th>Labels</th>
       <td>${this.getLabelsForDisplay(details.labels)}</td>
     </tr>
+    <tr>
+    <th>Allowed Statuses</th>
+    <td>${allowedStatusesString}</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
   </table>
 </details>
 <!--

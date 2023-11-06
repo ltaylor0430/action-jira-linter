@@ -155,7 +155,7 @@ async function run(): Promise<void> {
       if (GitHub.shouldUpdatePRDescription(prBody)) {
         console.log('Updating PR description…', prBody);
 
-        const description: string = Jira.getPRDescription(prBody, details);
+        const description: string = Jira.getPRDescription(prBody, details, allowedIssueStatuses);
 
         const prData: PullRequestUpdateParams = {
           owner,
@@ -183,8 +183,12 @@ async function run(): Promise<void> {
       } else {
         console.log('PR description will not be updated.');
       }
-
-      if (!Jira.isIssueStatusValid(validateIssueStatus, allowedIssueStatuses, details)) {
+       if (!Jira.isIssueStatusValid(validateIssueStatus, allowedIssueStatuses, details)) {
+        return exit('The found jira issue does is not in acceptable statuses');
+      } else {
+        console.log('The issue status is valid.');
+      }
+      /*if (!Jira.isIssueStatusValid(validateIssueStatus, allowedIssueStatuses, details)) {
         const body = Jira.getInvalidIssueStatusComment(details.status, allowedIssueStatuses);
         const invalidIssueStatusComment = { ...commonPayload, body };
         console.log('Adding comment for invalid issue status');
@@ -194,7 +198,7 @@ async function run(): Promise<void> {
         return exit('The found jira issue does is not in acceptable statuses');
       } else {
         console.log('The issue status is valid.');
-      }
+      }*/
     } else {
       const body = Jira.getNoIdComment(headBranch);
       const comment = { ...commonPayload, body };
