@@ -34,7 +34,7 @@ export class Jira {
   private getJIRAClient = (baseURL: string, username: string, token: string, isBearer: boolean): AxiosInstance => {
     if (isBearer) {
       return axios.create({
-        baseURL: `${baseURL}/rest/api/2`,
+        baseURL: `${baseURL}/rest/api/3`,
         timeout: 2000,
         headers: { authorization: `Bearer ${token}` },
       });
@@ -42,7 +42,7 @@ export class Jira {
       const credentials = `${username}:${token}`;
       const authorization = Buffer.from(credentials).toString('base64');
       return axios.create({
-        baseURL: `${baseURL}/rest/api/2`,
+        baseURL: `${baseURL}/rest/api/3`,
         timeout: 2000,
         headers: { authorization: `Basic ${authorization}` },
       });
